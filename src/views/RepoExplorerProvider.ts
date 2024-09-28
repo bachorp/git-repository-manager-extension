@@ -16,8 +16,11 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
       vscode.commands.registerCommand('repoExplorer.refresh', () => {
         this.refresh();
       }),
-      vscode.commands.registerCommand('repoExplorer.openRepo', (repoFolder: RepoFolder) => {
-        vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(repoFolder.path), !!vscode.workspace.workspaceFolders);
+      vscode.commands.registerCommand('repoExplorer.openInCurrentWindow', (repoFolder: RepoFolder) => {
+        vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(repoFolder.path), { forceNewWindow: false });
+      }),
+      vscode.commands.registerCommand('repoExplorer.openInNewWindow', (repoFolder: RepoFolder) => {
+        vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(repoFolder.path), { forceNewWindow: true });
       }),
       vscode.commands.registerCommand(
         'repoExplorer.search',
@@ -59,6 +62,7 @@ export class RepoExplorerProvider implements vscode.TreeDataProvider<RepoFolder>
             return;
           }
 
+          // TOOD: Add dialog asking whether to open in a new window
           vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(result.description!), !!vscode.workspace.workspaceFolders);
         },
       ),
@@ -116,7 +120,7 @@ class RepoFolder extends vscode.TreeItem {
   }
 
   command = this.collapsibleState === vscode.TreeItemCollapsibleState.None
-    ? { command: 'repoExplorer.openRepo', title: 'Open Repository', arguments: [this] }
+    ? { command: 'repoExplorer.openInCurrentWindow', title: 'Open Repository', arguments: [this] }
     : undefined;
 
   iconPath = new vscode.ThemeIcon(this.collapsibleState === vscode.TreeItemCollapsibleState.None ? 'git-branch' : 'symbol-folder');

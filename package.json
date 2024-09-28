@@ -33,9 +33,14 @@
         "icon": "$(refresh)"
       },
       {
-        "command": "repoExplorer.openRepo",
-        "title": "Open Repository",
+        "command": "repoExplorer.openInCurrentWindow",
+        "title": "Open in Current Window",
         "icon": "$(arrow-right)"
+      },
+      {
+        "command": "repoExplorer.openInNewWindow",
+        "title": "Open in New Window",
+        "icon": "$(empty-window)"
       }
     ],
     "viewsContainers": {
@@ -51,13 +56,11 @@
       "git-repository-manager": [
         {
           "id": "welcome",
-          "name": "Welcome",
-          "when": "isInWorkspace"
+          "name": "Welcome"
         },
         {
           "id": "repoExplorer",
-          "name": "Git Repositories",
-          "when": "isInWorkspace"
+          "name": "Git Repositories"
         }
       ]
     },
@@ -87,7 +90,12 @@
       ],
       "view/item/context": [
         {
-          "command": "repoExplorer.openRepo",
+          "command": "repoExplorer.openInCurrentWindow",
+          "when": "viewItem == repoFolder",
+          "group": "inline"
+        },
+        {
+          "command": "repoExplorer.openInNewWindow",
           "when": "viewItem == repoFolder",
           "group": "inline"
         }

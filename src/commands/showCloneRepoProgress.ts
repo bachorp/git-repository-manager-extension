@@ -28,13 +28,21 @@ export function registryShowCloneRepoProgress(repoExplorerProvider: RepoExplorer
           // Get latest local repo.
           repoExplorerProvider.refresh();
 
-          const confirmText = 'Yes';
+          const open = 'Open';
+          const openInNewWindow = 'Open in New Window';
           vscode.window.showInformationMessage(
             `Clone repository to ${localRepoPath} Successfully! Do you want open it?`,
-            confirmText,
+            open,
+            openInNewWindow
           ).then(res => {
-            if (res === confirmText) {
-              vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(localRepoPath), !!vscode.workspace.workspaceFolders);
+            let newWindow = false
+            switch (res) {
+              case openInNewWindow:
+                newWindow = true;
+              case open:
+                vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(localRepoPath), {
+                  forceNewWindow: newWindow});
+                break;
             }
           });
         },
